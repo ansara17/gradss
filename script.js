@@ -1,23 +1,42 @@
 let musicPlayed = false;
-const bgMusic = document.getElementById('bg-music');
+let holdTimer;
+let statsBloomed = 0;
+let firefliesCaught = 0;
+let clickedFireflies = new Set();
+let letterWritten = false;
 
-// Pindah Scene
+// Tunggu sampai HTML benar-benar termuat di HP
+document.addEventListener("DOMContentLoaded", () => {
+    // Registrasi Event Listener Bunga dengan aman
+    const bud = document.getElementById('the-bud');
+    if(bud) {
+        bud.addEventListener('mousedown', startBloom);
+        bud.addEventListener('touchstart', startBloom, { passive: true });
+        window.addEventListener('mouseup', stopBloom);
+        window.addEventListener('touchend', stopBloom);
+    }
+
+    createFireflies();
+    createStars();
+});
+
 function nextScene(index) {
     if (!musicPlayed) {
-        bgMusic.volume = 0.4;
-        bgMusic.play().catch(e => console.log("Autoplay dicegah browser."));
+        const bgMusic = document.getElementById('bg-music');
+        if(bgMusic) {
+            bgMusic.volume = 0.4;
+            bgMusic.play().catch(e => console.log("Menunggu interaksi pengguna untuk audio."));
+        }
         musicPlayed = true;
     }
     document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
     document.getElementById('scene-' + index).classList.add('active');
 }
 
-// SCENE 0: The Blooming Bud
-const bud = document.getElementById('the-bud');
-let holdTimer;
-
-function startBloom(e) {
-    e.preventDefault();
+function startBloom() {
+    const bud = document.getElementById('the-bud');
+    if(!bud) return;
+    
     bud.classList.add('bud-blooming');
     document.getElementById('hold-instruction').innerText = "Tahan terus...";
     
@@ -33,20 +52,13 @@ function startBloom(e) {
 
 function stopBloom() {
     clearTimeout(holdTimer);
-    if (bud.innerText !== "🌸") {
+    const bud = document.getElementById('the-bud');
+    if (bud && bud.innerText !== "🌸") {
         bud.classList.remove('bud-blooming');
         document.getElementById('hold-instruction').innerText = "Sentuh dan tahan kuncup ini...";
     }
 }
 
-bud.addEventListener('mousedown', startBloom);
-bud.addEventListener('touchstart', startBloom);
-window.addEventListener('mouseup', stopBloom);
-window.addEventListener('touchend', stopBloom);
-
-
-// SCENE 1: Blooming Stats
-let statsBloomed = 0;
 function bloomStat(element, text) {
     if (!element.classList.contains('bloomed')) {
         element.classList.add('bloomed');
@@ -59,22 +71,16 @@ function bloomStat(element, text) {
     }
 }
 
-// SCENE 2: Fireflies (Diperbaiki jadi Modal Rapi)
-const memories = [
-    "Mengingat malam-malam revisi skripsi yang melelahkan dan sering bikin kamu ragu...",
-    "Mengingat rasa gugup yang luar biasa sebelum masuk ruang sidang waktu itu...",
-    "Dan melihatmu hari ini, memakai toga kebanggaan itu dengan senyum paling lega...",
-    "Rasanya semua usahamu terbayar lunas. Kamu membuktikan kalau kamu bisa."
-];
-
-let firefliesCaught = 0;
-const fireflyArea = document.getElementById('firefly-area');
-const memoryModal = document.getElementById('memory-modal');
-const memoryText = document.getElementById('memory-text');
-let clickedFireflies = new Set();
-
 function createFireflies() {
-    // Menyebar luas di layar HP/Desktop
+    const memories = [
+        "Mengingat malam-malam revisi skripsi yang melelahkan dan sering bikin kamu ragu...",
+        "Mengingat rasa gugup yang luar biasa sebelum masuk ruang sidang waktu itu...",
+        "Dan melihatmu hari ini, memakai toga kebanggaan itu dengan senyum paling lega...",
+        "Rasanya semua usahamu terbayar lunas. Kamu membuktikan kalau kamu bisa."
+    ];
+    const fireflyArea = document.getElementById('firefly-area');
+    if(!fireflyArea) return;
+
     const positions = [
         {top: '15%', left: '20%'}, 
         {top: '75%', left: '80%'},
@@ -92,12 +98,11 @@ function createFireflies() {
         f.onclick = function() {
             if(!clickedFireflies.has(i)) {
                 clickedFireflies.add(i);
-                this.style.opacity = '0'; // Kunang-kunang meredup/hilang
+                this.style.opacity = '0';
                 this.style.pointerEvents = 'none';
                 
-                // Tampilkan Modal
-                memoryText.innerText = mem;
-                memoryModal.classList.add('show');
+                document.getElementById('memory-text').innerText = mem;
+                document.getElementById('memory-modal').classList.add('show');
                 
                 firefliesCaught++;
                 if(firefliesCaught === 4) {
@@ -111,11 +116,9 @@ function createFireflies() {
 }
 
 function closeMemory() {
-    memoryModal.classList.remove('show');
+    document.getElementById('memory-modal').classList.remove('show');
 }
 
-// SCENE 3: Written by the Stars
-let letterWritten = false;
 function writeLetter() {
     if(letterWritten) return;
     letterWritten = true;
@@ -125,7 +128,7 @@ function writeLetter() {
     lines.forEach((line, index) => {
         setTimeout(() => {
             line.classList.add('revealed');
-        }, index * 1500); // Muncul perlahan per baris
+        }, index * 1500); 
     });
 
     setTimeout(() => {
@@ -133,7 +136,6 @@ function writeLetter() {
     }, lines.length * 1500);
 }
 
-// SCENE 4: Fly Lantern
 function flyLantern() {
     document.getElementById('btn-fly').style.display = "none";
     document.getElementById('lantern').classList.add('fly-away');
@@ -142,10 +144,9 @@ function flyLantern() {
     }, 2000);
 }
 
-// BG Stars Generator
-window.onload = () => {
-    createFireflies();
+function createStars() {
     const container = document.getElementById('stars-container');
+    if(!container) return;
     for (let i = 0; i < 30; i++) {
         let star = document.createElement('div');
         star.classList.add('star-bg');
@@ -158,4 +159,4 @@ window.onload = () => {
         star.style.animationDelay = (Math.random() * 2) + 's';
         container.appendChild(star);
     }
-};
+}

@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Amel — The Starlit Garden</title>
-    <script>
-        const version = Date.now();
-        document.write(`<link rel="stylesheet" href="style.css?v=${version}">`);
-    </script>
+    <!-- Pemanggilan File Standar & Aman -->
+    <link rel="stylesheet" href="style.css?v=2.0">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Background Stars -->
     <div id="stars-container"></div>
 
-    <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="assets/music/background-music.mp3" type="audio/mpeg">
     </audio>
@@ -69,10 +65,8 @@
             <h2 class="section-title">Jejak Cahayamu</h2>
             <p class="body-text mb-4" id="firefly-instruction">Tangkap 4 kunang-kunang di taman ini...</p>
             
-            <!-- Kunang-kunang Area -->
             <div id="firefly-area"></div>
 
-            <!-- Modal Memori yang rapi -->
             <div id="memory-modal" class="hidden-modal">
                 <p id="memory-text" class="body-text"></p>
                 <button class="btn-small mt-4" onclick="closeMemory()">Tutup</button>
@@ -116,8 +110,7 @@
         </div>
     </div>
 
-    <script>
-        document.write(`<script src="script.js?v=${version}"><\/script>`);
-    </script>
+    <!-- Pemanggilan Script Aman -->
+    <script src="script.js?v=2.0"></script>
 </body>
 </html>
