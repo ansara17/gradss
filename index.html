@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Amel — The Epilogue</title>
+    <!-- Auto Cache-Busting -->
+    <script>
+        const version = Date.now();
+        document.write(`<link rel="stylesheet" href="style.css?v=${version}">`);
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Stars Container -->
+    <div id="stars-container"></div>
+
+    <!-- Audio Element -->
+    <audio id="bg-music" loop>
+        <source src="assets/music/background-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- SCENE 1: Opening -->
+    <div id="scene-0" class="scene active">
+        <div class="content-box">
+            <h1 class="title">THE EPILOGUE</h1>
+            <p class="subtitle"><i>You Bloomed Beautifully Under the Stars.</i></p>
+            <p class="body-text mt-4">Hari ini bukan lagi tentang kecemasan sebelum ruang sidang.<br>Hari ini adalah tentang toga, senyum lega, dan bukti nyata dari semua perjuanganmu.</p>
+            <button class="btn mt-4" onclick="nextScene(1)">Buka Lembaran Baru</button>
+        </div>
+    </div>
+
+    <!-- SCENE 2: The Graduate Profile -->
+    <div id="scene-1" class="scene">
+        <div class="content-box">
+            <h2 class="section-title">The Graduate</h2>
+            <div class="profile-frame">
+                <!-- Pastikan foto amel.jpg ada di folder assets/photos -->
+                <img src="assets/photos/amel.jpg" alt="Amel Graduation" id="amel-photo" onerror="this.src='https://via.placeholder.com/300x400/e6e0f8/4a2c40?text=S.Pd.'">
+            </div>
+            <h3 class="name-text">Akmelia Zahra, S.Pd.</h3>
+            <p class="status-badge">Officially Graduated</p>
+            <div class="strength-box">
+                <p>Tetap tumbuh meskipun sempat ragu, berhasil mengalahkan <i>overthinking</i>, dan akhirnya mekar dengan indah di waktu yang tepat.</p>
+            </div>
+            <button class="btn mt-4" onclick="nextScene(2)">Lihat Perjalananmu</button>
+        </div>
+    </div>
+
+    <!-- SCENE 3: The Retrospective -->
+    <div id="scene-2" class="scene">
+        <div class="content-box">
+            <h2 class="section-title">A Look Back</h2>
+            <p class="body-text mb-4">Ketuk kartu di bawah ini untuk membuka ingatan kecil kita.</p>
+            
+            <div class="cards-container">
+                <div class="retro-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">✦ Memori 1</div>
+                        <div class="card-back">Mengingat malam-malam revisi skripsi yang melelahkan dan bikin kamu ragu...</div>
+                    </div>
+                </div>
+                <div class="retro-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">✦ Memori 2</div>
+                        <div class="card-back">Mengingat rasa gugup yang luar biasa sebelum masuk ruang sidang waktu itu...</div>
+                    </div>
+                </div>
+                <div class="retro-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">✦ Memori 3</div>
+                        <div class="card-back">Dan melihatmu hari ini, memakai toga kebanggaan itu dengan senyum lega...</div>
+                    </div>
+                </div>
+                <div class="retro-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">✦ Memori 4</div>
+                        <div class="card-back">Rasanya semua usahamu terbayar lunas. Kamu membuktikan kalau kamu bisa.</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn mt-4" id="btn-to-letter" style="display: none;" onclick="nextScene(3)">Baca Surat</button>
+        </div>
+    </div>
+
+    <!-- SCENE 4: The Letter -->
+    <div id="scene-3" class="scene">
+        <div class="content-box envelope-wrapper">
+            <h2 class="section-title">A Letter for You</h2>
+            <div class="envelope" id="envelope" onclick="openLetter()">
+                <div class="envelope-flap"></div>
+                <div class="letter-paper">
+                    <p>Amel,</p>
+                    <p>Waktu kamu takut sebelum sidang waktu itu, aku bilang kalau kamu lebih siap dari yang kamu kira. Hari ini, kamu membuktikannya.</p>
+                    <p>Kamu tidak hanya melewati ujian itu, tapi kamu menyelesaikannya dengan sangat baik. Aku tahu proses menuju gelar S.Pd. ini kadang bikin kamu <i>insecure</i> dan cemas. Tapi melihat kamu tersenyum hari ini, aku sangat, sangat bangga.</p>
+                    <p><i>You did it, Amel. You totally deserve this moment.</i></p>
+                    <p class="easter-egg">(P.S. Chanyeol pasti juga bangga banget lihat kamu pakai toga hari ini 😉)</p>
+                    <p class="signature">— Ansa</p>
+                </div>
+                <div class="envelope-front">Tap to Open</div>
+            </div>
+            <button class="btn mt-4" id="btn-to-closing" style="display: none; opacity: 0; transition: opacity 1s;" onclick="nextScene(4)">Satu Langkah Terakhir</button>
+        </div>
+    </div>
+
+    <!-- SCENE 5: Closing -->
+    <div id="scene-4" class="scene">
+        <div class="content-box">
+            <h2 class="title" style="font-size: 1.8rem;">Bismillahirrahmanirrahim.</h2>
+            <p class="body-text mt-4"><i>One chapter closes, another begins. But for tonight, just be proud of yourself.</i></p>
+            <div class="prayer-box">
+                <p>Semoga ilmu yang Amel dapatkan membawa berkah, dan langkah selanjutnya selalu diiringi kebaikan, kemudahan, dan kebahagiaan.</p>
+            </div>
+            <p class="body-text"><b>Happy Graduation, Amel!</b></p>
+            <button class="btn mt-4" onclick="saveMoment()">Simpan Momen Ini</button>
+            <p id="save-msg" class="save-msg"></p>
+        </div>
+    </div>
+
+    <!-- Versioning JS untuk Auto Cache-Bust -->
+    <script>
+        document.write(`<script src="script.js?v=${version}"><\/script>`);
+    </script>
+</body>
+</html>

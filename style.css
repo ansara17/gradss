@@ -1,0 +1,231 @@
+/* TEMA THE STARLIT GARDEN */
+:root {
+    --bg-top: #fdfbfb; /* Pearl White */
+    --bg-bottom: #f4f0f8; /* Soft Lilac Gradient */
+    --text-main: #4a2c40; /* Dark Plum */
+    --sage-green: #9EAF91; /* Soft Sage Green */
+    --soft-peach: #fbc4ab; 
+    --gold-star: #e9d6af; /* Champagne Gold */
+    --card-bg: rgba(255, 255, 255, 0.85);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    color: var(--text-main);
+    font-family: 'Lora', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Background Stars */
+#stars-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    background-color: var(--gold-star);
+    border-radius: 50%;
+    animation: twinkle infinite alternate ease-in-out;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.2; transform: scale(0.8); box-shadow: 0 0 2px var(--gold-star); }
+    100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 6px var(--gold-star); }
+}
+
+/* Scenes & Layout */
+.scene {
+    position: absolute;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.2s ease, transform 1.2s ease;
+    transform: translateY(20px);
+    z-index: 1;
+    padding: 20px;
+}
+
+.scene.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    z-index: 10;
+}
+
+.content-box {
+    background: var(--card-bg);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(74, 44, 64, 0.08);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    border: 1px solid rgba(158, 175, 145, 0.3); /* Sage border */
+    position: relative;
+}
+
+/* Typography */
+.title, .section-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.title { font-size: 2.2rem; letter-spacing: 2px; }
+.section-title { font-size: 1.8rem; }
+.subtitle { font-style: italic; color: var(--sage-green); font-size: 1.1rem; }
+.body-text { line-height: 1.6; font-size: 1rem; }
+.mt-4 { margin-top: 20px; }
+.mb-4 { margin-bottom: 20px; }
+
+/* Buttons */
+.btn {
+    background-color: var(--sage-green);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(158, 175, 145, 0.4);
+}
+
+.btn:hover {
+    background-color: var(--text-main);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 44, 64, 0.3);
+}
+
+/* Profile Elements */
+.profile-frame {
+    width: 140px; height: 180px;
+    margin: 0 auto 15px;
+    border-radius: 100px 100px 10px 10px; /* Arch shape */
+    overflow: hidden;
+    border: 4px solid var(--soft-peach);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.profile-frame img { width: 100%; height: 100%; object-fit: cover; }
+.name-text { font-family: 'Playfair Display', serif; font-size: 1.4rem; }
+.status-badge {
+    display: inline-block;
+    background: var(--bg-bottom);
+    color: var(--text-main);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin: 10px 0;
+    border: 1px solid var(--sage-green);
+}
+.strength-box {
+    background: rgba(158, 175, 145, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Interactive Cards */
+.cards-container { display: flex; flex-direction: column; gap: 10px; }
+.retro-card {
+    background: #fff;
+    border: 1px solid var(--soft-peach);
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.retro-card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(251, 196, 171, 0.3); }
+.card-front { font-weight: bold; color: var(--sage-green); }
+.card-back {
+    display: none;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-main);
+    animation: fadeIn 0.5s ease;
+}
+.retro-card.flipped .card-front { color: var(--text-main); }
+.retro-card.flipped .card-back { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Envelope & Letter */
+.envelope {
+    background: var(--soft-peach);
+    width: 100%;
+    height: 120px;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-main);
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.envelope.open {
+    height: 380px;
+    background: transparent;
+    box-shadow: none;
+    cursor: default;
+}
+.envelope-front { position: absolute; z-index: 3; transition: opacity 0.3s; }
+.envelope.open .envelope-front { opacity: 0; pointer-events: none; }
+
+.letter-paper {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    width: 95%; height: 95%;
+    background: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    opacity: 0;
+    transition: all 0.8s ease;
+    z-index: 2;
+    overflow-y: auto;
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border: 1px solid var(--sage-green);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.envelope.open .letter-paper { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+.letter-paper p { margin-bottom: 10px; }
+.easter-egg { font-size: 0.8rem; color: #888; font-style: italic; }
+.signature { font-family: 'Playfair Display', serif; font-size: 1.2rem; text-align: right; margin-top: 15px; color: var(--sage-green); }
+
+/* Closing Prayer Box */
+.prayer-box {
+    background: rgba(251, 196, 171, 0.2);
+    border-left: 3px solid var(--soft-peach);
+    padding: 15px;
+    margin: 20px 0;
+    font-style: italic;
+    font-size: 0.95rem;
+}
+.save-msg { margin-top: 15px; font-size: 0.9rem; color: var(--sage-green); opacity: 0; transition: opacity 0.5s;}
