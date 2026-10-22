@@ -36,3 +36,126 @@
     margin-top: 8px;
   }
 }
+
+/* PRESSED FLOWER JOURNAL theme */
+:root {
+  --paper: #f5f0e7;
+  --paper-light: #fbf8f1;
+  --ink: #403c42;
+  --muted: #706b70;
+  --blue: #9aaa91;
+  --blue-deep: #586c5c;
+  --copper: #a8737e;
+  --line: #dfd3c7;
+}
+
+html, body { background-color: var(--paper); }
+body {
+  background-image:
+    radial-gradient(ellipse at 14% 11%, rgba(183, 148, 115, .13), transparent 33%),
+    radial-gradient(ellipse at 85% 84%, rgba(150, 166, 143, .12), transparent 38%),
+    linear-gradient(135deg, #f8f3ea, #f2ede4);
+}
+.scene:not(.scene--cover)::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 18px;
+  right: 0;
+  width: clamp(90px, 15vw, 190px);
+  height: clamp(140px, 24vw, 270px);
+  background: url("assets/pressed-flower-sprig.svg") center / contain no-repeat;
+  opacity: .38;
+  pointer-events: none;
+}
+.scene:not(.scene--cover)::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  bottom: 28px;
+  left: 0;
+  width: clamp(68px, 11vw, 132px);
+  height: clamp(100px, 18vw, 200px);
+  background: url("assets/pressed-flower-sprig.svg") center / contain no-repeat;
+  opacity: .2;
+  transform: rotate(180deg);
+  pointer-events: none;
+}
+.scene-inner, .celebration-layout, .letter-layout, .ending-card, .scene-footer {
+  position: relative;
+  z-index: 1;
+}
+.scene--cover {
+  background:
+    radial-gradient(ellipse at 82% 52%, rgba(185, 127, 140, .13), transparent 40%),
+    radial-gradient(ellipse at 8% 85%, rgba(154, 170, 145, .16), transparent 34%),
+    var(--paper);
+}
+.cover-photo, .hero-photo {
+  border: 1px solid rgba(168, 115, 126, .2);
+  background: #fffdf7;
+  box-shadow: 0 20px 65px rgba(76, 63, 61, .14);
+}
+.cover-photo::before, .hero-photo::before {
+  content: "✿";
+  position: absolute;
+  z-index: 2;
+  top: -17px;
+  right: -12px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(168, 115, 126, .23);
+  border-radius: 50%;
+  background: var(--paper-light);
+  color: var(--copper);
+  font-size: 1.25rem;
+  transform: rotate(12deg);
+}
+.cover-photo, .hero-photo { position: relative; }
+.memory-strip article, .letter, .closing-copy {
+  background-color: rgba(251, 248, 241, .86);
+  border-color: rgba(125, 113, 104, .16);
+}
+.memory-strip article { border-radius: 2px 2px 18px 2px; }
+blockquote, .letter-highlight, .prayer {
+  border-color: var(--copper);
+  background-color: rgba(185, 127, 140, .09);
+}
+.seal, .eyebrow, .date, .degree span, .saved-note { color: var(--copper); }
+.button {
+  background: var(--blue-deep);
+  box-shadow: 0 9px 24px rgba(88, 108, 92, .2);
+}
+.button:hover { background: #485d4d; }
+.icon-button, .navigation { border-color: rgba(88, 108, 92, .18); }
+.navigation { background: rgba(251, 248, 241, .96); }
+#dots button { background: #c7cbbd; }
+#dots button.current { background: var(--blue-deep); }
+.ps { border-color: var(--copper); background: rgba(185, 127, 140, .08); }
+.ending-flower { color: var(--copper); }
+
+@media (max-width: 760px) {
+  .scene:not(.scene--cover)::before {
+    top: 72px;
+    right: -13px;
+    width: 82px;
+    height: 130px;
+    opacity: .23;
+  }
+  .scene:not(.scene--cover)::after {
+    bottom: 68px;
+    left: -18px;
+    width: 65px;
+    height: 100px;
+    opacity: .15;
+  }
+  .cover-photo::before, .hero-photo::before {
+    width: 34px;
+    height: 34px;
+    top: -13px;
+    right: -9px;
+    font-size: 1rem;
+  }
+}
