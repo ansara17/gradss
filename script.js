@@ -1,162 +1,57 @@
-let musicPlayed = false;
-let holdTimer;
-let statsBloomed = 0;
-let firefliesCaught = 0;
-let clickedFireflies = new Set();
-let letterWritten = false;
+(() => {
+  const scenes = [...document.querySelectorAll('.scene')];
+  const topbar = document.getElementById('topbar');
+  const navigation = document.getElementById('navigation');
+  const label = document.getElementById('chapter-label');
+  const dots = document.getElementById('dots');
+  const audio = document.getElementById('music');
+  let current = 0;
+  let musicOn = false;
 
-// Tunggu sampai HTML benar-benar termuat di HP
-document.addEventListener("DOMContentLoaded", () => {
-    // Registrasi Event Listener Bunga dengan aman
-    const bud = document.getElementById('the-bud');
-    if(bud) {
-        bud.addEventListener('mousedown', startBloom);
-        bud.addEventListener('touchstart', startBloom, { passive: true });
-        window.addEventListener('mouseup', stopBloom);
-        window.addEventListener('touchend', stopBloom);
-    }
-
-    createFireflies();
-    createStars();
-});
-
-function nextScene(index) {
-    if (!musicPlayed) {
-        const bgMusic = document.getElementById('bg-music');
-        if(bgMusic) {
-            bgMusic.volume = 0.4;
-            bgMusic.play().catch(e => console.log("Menunggu interaksi pengguna untuk audio."));
-        }
-        musicPlayed = true;
-    }
-    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
-    document.getElementById('scene-' + index).classList.add('active');
-}
-
-function startBloom() {
-    const bud = document.getElementById('the-bud');
-    if(!bud) return;
-    
-    bud.classList.add('bud-blooming');
-    document.getElementById('hold-instruction').innerText = "Tahan terus...";
-    
-    holdTimer = setTimeout(() => {
-        bud.innerText = "🌸"; 
-        document.getElementById('hold-instruction').style.display = "none";
-        document.getElementById('op-title').classList.add('show-text');
-        document.getElementById('op-sub').classList.add('show-text');
-        document.getElementById('op-desc').classList.add('show-text');
-        document.getElementById('btn-scene1').classList.add('show-text');
-    }, 1500);
-}
-
-function stopBloom() {
-    clearTimeout(holdTimer);
-    const bud = document.getElementById('the-bud');
-    if (bud && bud.innerText !== "🌸") {
-        bud.classList.remove('bud-blooming');
-        document.getElementById('hold-instruction').innerText = "Sentuh dan tahan kuncup ini...";
-    }
-}
-
-function bloomStat(element, text) {
-    if (!element.classList.contains('bloomed')) {
-        element.classList.add('bloomed');
-        element.querySelector('.bud-icon').innerText = "🌸";
-        element.querySelector('.stat-text').innerText = text;
-        statsBloomed++;
-        if (statsBloomed === 3) {
-            document.getElementById('btn-scene2').style.display = "inline-block";
-        }
-    }
-}
-
-function createFireflies() {
-    const memories = [
-        "Mengingat malam-malam revisi skripsi yang melelahkan dan sering bikin kamu ragu...",
-        "Mengingat rasa gugup yang luar biasa sebelum masuk ruang sidang waktu itu...",
-        "Dan melihatmu hari ini, memakai toga kebanggaan itu dengan senyum paling lega...",
-        "Rasanya semua usahamu terbayar lunas. Kamu membuktikan kalau kamu bisa."
-    ];
-    const fireflyArea = document.getElementById('firefly-area');
-    if(!fireflyArea) return;
-
-    const positions = [
-        {top: '15%', left: '20%'}, 
-        {top: '75%', left: '80%'},
-        {top: '40%', left: '85%'}, 
-        {top: '60%', left: '15%'}
-    ];
-    
-    memories.forEach((mem, i) => {
-        let f = document.createElement('div');
-        f.className = 'firefly';
-        f.style.top = positions[i].top;
-        f.style.left = positions[i].left;
-        f.style.animationDelay = (i * 0.7) + 's';
-        
-        f.onclick = function() {
-            if(!clickedFireflies.has(i)) {
-                clickedFireflies.add(i);
-                this.style.opacity = '0';
-                this.style.pointerEvents = 'none';
-                
-                document.getElementById('memory-text').innerText = mem;
-                document.getElementById('memory-modal').classList.add('show');
-                
-                firefliesCaught++;
-                if(firefliesCaught === 4) {
-                    document.getElementById('firefly-instruction').innerText = "Semua ingatan telah terkumpul.";
-                    document.getElementById('btn-scene3').style.display = "inline-block";
-                }
-            }
-        };
-        fireflyArea.appendChild(f);
+  function showScene(index) {
+    current = Math.max(0, Math.min(index, scenes.length - 1));
+    scenes.forEach((scene, i) => {
+      scene.classList.toggle('active', i === current);
+      if (i === current) scene.scrollTop = 0;
     });
-}
+    topbar.hidden = current === 0;
+    navigation.hidden = current === 0;
+    label.textContent = `${String(current + 1).padStart(2, '0')} / ${String(scenes.length).padStart(2, '0')}`;
+    [...dots.children].forEach((dot, i) => dot.classList.toggle('current', i === current));
+    document.getElementById('previous').disabled = current === 0;
+    document.getElementById('next').disabled = current === scenes.length - 1;
+  }
 
-function closeMemory() {
-    document.getElementById('memory-modal').classList.remove('show');
-}
+  scenes.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', `Buka bagian ${i + 1}`);
+    dot.addEventListener('click', () => showScene(i));
+    dots.appendChild(dot);
+  });
 
-function writeLetter() {
-    if(letterWritten) return;
-    letterWritten = true;
-    document.getElementById('star-instruction').style.opacity = "0";
-    
-    const lines = document.querySelectorAll('.letter-line');
-    lines.forEach((line, index) => {
-        setTimeout(() => {
-            line.classList.add('revealed');
-        }, index * 1500); 
-    });
-
-    setTimeout(() => {
-        document.getElementById('btn-scene4').style.display = "inline-block";
-    }, lines.length * 1500);
-}
-
-function flyLantern() {
-    document.getElementById('btn-fly').style.display = "none";
-    document.getElementById('lantern').classList.add('fly-away');
-    setTimeout(() => {
-        document.getElementById('save-msg').style.opacity = '1';
-    }, 2000);
-}
-
-function createStars() {
-    const container = document.getElementById('stars-container');
-    if(!container) return;
-    for (let i = 0; i < 30; i++) {
-        let star = document.createElement('div');
-        star.classList.add('star-bg');
-        let size = Math.random() * 2 + 1;
-        star.style.width = size + 'px';
-        star.style.height = size + 'px';
-        star.style.left = Math.random() * 100 + 'vw';
-        star.style.top = Math.random() * 100 + 'vh';
-        star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        star.style.animationDelay = (Math.random() * 2) + 's';
-        container.appendChild(star);
+  document.querySelectorAll('[data-next]').forEach(button => button.addEventListener('click', async () => {
+    if (!musicOn) {
+      try { audio.volume = 0.24; await audio.play(); musicOn = true; document.getElementById('music-toggle').textContent = '♫'; }
+      catch { /* Audio may be unavailable; the card still works without it. */ }
     }
-}
+    showScene(current + 1);
+  }));
+  document.getElementById('previous').addEventListener('click', () => showScene(current - 1));
+  document.getElementById('next').addEventListener('click', () => showScene(current + 1));
+  document.getElementById('home').addEventListener('click', () => showScene(0));
+  document.getElementById('restart').addEventListener('click', () => showScene(0));
+  document.getElementById('music-toggle').addEventListener('click', async event => {
+    if (musicOn) { audio.pause(); musicOn = false; event.currentTarget.textContent = '♪'; }
+    else { try { await audio.play(); musicOn = true; event.currentTarget.textContent = '♫'; } catch { event.currentTarget.textContent = '♪'; } }
+  });
+  document.getElementById('save-button').addEventListener('click', event => {
+    document.getElementById('saved-note').hidden = false;
+    event.currentTarget.textContent = 'Tersimpan dengan cinta ✓';
+    event.currentTarget.disabled = true;
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight') showScene(current + 1);
+    if (event.key === 'ArrowLeft') showScene(current - 1);
+  });
+})();
