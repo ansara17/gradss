@@ -1,7 +1,7 @@
 let musicPlayed = false;
 const bgMusic = document.getElementById('bg-music');
 
-// Play Music & Change Scene
+// Pindah Scene
 function nextScene(index) {
     if (!musicPlayed) {
         bgMusic.volume = 0.4;
@@ -12,7 +12,7 @@ function nextScene(index) {
     document.getElementById('scene-' + index).classList.add('active');
 }
 
-// SCENE 0: The Blooming Bud Logic
+// SCENE 0: The Blooming Bud
 const bud = document.getElementById('the-bud');
 let holdTimer;
 
@@ -22,13 +22,13 @@ function startBloom(e) {
     document.getElementById('hold-instruction').innerText = "Tahan terus...";
     
     holdTimer = setTimeout(() => {
-        bud.innerText = "🌸"; // Berubah jadi mekar
+        bud.innerText = "🌸"; 
         document.getElementById('hold-instruction').style.display = "none";
         document.getElementById('op-title').classList.add('show-text');
         document.getElementById('op-sub').classList.add('show-text');
         document.getElementById('op-desc').classList.add('show-text');
         document.getElementById('btn-scene1').classList.add('show-text');
-    }, 1500); // 1.5 detik ditahan
+    }, 1500);
 }
 
 function stopBloom() {
@@ -59,21 +59,27 @@ function bloomStat(element, text) {
     }
 }
 
-// SCENE 2: Fireflies Memories
+// SCENE 2: Fireflies (Diperbaiki jadi Modal Rapi)
 const memories = [
-    "Mengingat malam-malam revisi skripsi yang melelahkan dan bikin kamu ragu...",
+    "Mengingat malam-malam revisi skripsi yang melelahkan dan sering bikin kamu ragu...",
     "Mengingat rasa gugup yang luar biasa sebelum masuk ruang sidang waktu itu...",
-    "Dan melihatmu hari ini, memakai toga kebanggaan itu dengan senyum lega...",
+    "Dan melihatmu hari ini, memakai toga kebanggaan itu dengan senyum paling lega...",
     "Rasanya semua usahamu terbayar lunas. Kamu membuktikan kalau kamu bisa."
 ];
 
 let firefliesCaught = 0;
 const fireflyArea = document.getElementById('firefly-area');
+const memoryModal = document.getElementById('memory-modal');
+const memoryText = document.getElementById('memory-text');
+let clickedFireflies = new Set();
 
 function createFireflies() {
+    // Menyebar luas di layar HP/Desktop
     const positions = [
-        {top: '10%', left: '10%'}, {top: '60%', left: '70%'},
-        {top: '20%', left: '80%'}, {top: '70%', left: '20%'}
+        {top: '15%', left: '20%'}, 
+        {top: '75%', left: '80%'},
+        {top: '40%', left: '85%'}, 
+        {top: '60%', left: '15%'}
     ];
     
     memories.forEach((mem, i) => {
@@ -81,20 +87,21 @@ function createFireflies() {
         f.className = 'firefly';
         f.style.top = positions[i].top;
         f.style.left = positions[i].left;
-        f.style.animationDelay = (i * 0.5) + 's';
-        
-        let text = document.createElement('span');
-        text.className = 'firefly-text';
-        text.innerText = mem;
-        f.appendChild(text);
+        f.style.animationDelay = (i * 0.7) + 's';
         
         f.onclick = function() {
-            if(!this.classList.contains('caught')) {
-                this.classList.add('caught');
-                this.style.top = (i * 25) + '%'; // Susun rapi ke bawah
-                this.style.left = '0';
+            if(!clickedFireflies.has(i)) {
+                clickedFireflies.add(i);
+                this.style.opacity = '0'; // Kunang-kunang meredup/hilang
+                this.style.pointerEvents = 'none';
+                
+                // Tampilkan Modal
+                memoryText.innerText = mem;
+                memoryModal.classList.add('show');
+                
                 firefliesCaught++;
                 if(firefliesCaught === 4) {
+                    document.getElementById('firefly-instruction').innerText = "Semua ingatan telah terkumpul.";
                     document.getElementById('btn-scene3').style.display = "inline-block";
                 }
             }
@@ -103,26 +110,28 @@ function createFireflies() {
     });
 }
 
+function closeMemory() {
+    memoryModal.classList.remove('show');
+}
 
 // SCENE 3: Written by the Stars
 let letterWritten = false;
 function writeLetter() {
     if(letterWritten) return;
     letterWritten = true;
-    document.getElementById('star-instruction').style.display = "none";
+    document.getElementById('star-instruction').style.opacity = "0";
     
     const lines = document.querySelectorAll('.letter-line');
     lines.forEach((line, index) => {
         setTimeout(() => {
             line.classList.add('revealed');
-        }, index * 1200); // Muncul perlahan per baris
+        }, index * 1500); // Muncul perlahan per baris
     });
 
     setTimeout(() => {
         document.getElementById('btn-scene4').style.display = "inline-block";
-    }, lines.length * 1200);
+    }, lines.length * 1500);
 }
-
 
 // SCENE 4: Fly Lantern
 function flyLantern() {
@@ -130,15 +139,14 @@ function flyLantern() {
     document.getElementById('lantern').classList.add('fly-away');
     setTimeout(() => {
         document.getElementById('save-msg').style.opacity = '1';
-    }, 1500);
+    }, 2000);
 }
-
 
 // BG Stars Generator
 window.onload = () => {
     createFireflies();
     const container = document.getElementById('stars-container');
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 30; i++) {
         let star = document.createElement('div');
         star.classList.add('star-bg');
         let size = Math.random() * 2 + 1;
